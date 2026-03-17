@@ -1,0 +1,18 @@
+cmake -B build
+cmake --build build -j8
+
+picotool partition create main.json pt.uf2
+
+sudo picotool load pt.uf2
+sudo picotool reboot -u
+
+ NOTE reboot -u reboots the device (as is required to install the partition table) then returns to BOOTSEL mode so we can send more commands to the device.
+
+sudo picotool load build/pico2_ota_wifi_firmware.uf2
+sudo picotool load -x build/pico2_ota.uf2
+
+ NOTE The first load writes the Wifi Firmware into one of the partitions set aside for that.
+ The second load -x loads the main application code into one of the main partitions, then resets the chip to start execution
+
+python3 ./python_ota_update.py 192.168.4.1   build/pico2_ota.uf2
+python3 ./python_ota_update.py 193.168.4.248 build/pico2_ota.uf2
