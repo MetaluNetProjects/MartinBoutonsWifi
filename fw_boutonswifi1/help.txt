@@ -15,4 +15,4 @@ sudo picotool load -x build/pico2_ota.uf2
  The second load -x loads the main application code into one of the main partitions, then resets the chip to start execution
 
 python3 ./python_ota_update.py 192.168.4.1   build/pico2_ota.uf2
-python3 ./python_ota_update.py 193.168.4.248 build/pico2_ota.uf2
+python3 ./python_ota_update.py 192.168.5.10 build/pico2_ota.uf2

@@ -5,16 +5,12 @@
 
 #include "pico/stdlib.h"
 #include "udp_server.hpp"
-//#include "tcp_server.hpp"
 #include "fraise.h"
 #include "cpuload.h"
 #include "free_heap.h"
 #include "system.h"
 #include "math.h"
 
-#define WS2812_PIN 0
-
-//TCPServer tcp;
 bool do_print_led = false;
 
 void blink(int ledPeriod) {
@@ -43,6 +39,9 @@ void setup() {
         gpio_set_dir(i, GPIO_IN);
         gpio_pull_up(i);
     }
+    ip_addr_t ip;
+    IP4_ADDR(&ip, 192, 168, 5, WIFI_IPADDR_D);
+    netif_set_ipaddr(netif_default, &ip);
 }
 
 void buttons_update() {
@@ -77,8 +76,6 @@ void loop() {
 void fraise_receivebytes(const char* data, uint8_t len) {
 	char command = fraise_get_uint8();
 	switch(command) {
-		//case 101: pat_cpuload.get_load(); wsp_cpuload.get_load(); dma_cpuload.get_load(); break;
-		//case 102: pat_cpuload.reset(); wsp_cpuload.reset(); dma_cpuload.reset(); break;
 		case 103: fraise_printf("l free ram: %ld\n", getFreeHeap()); break;
 		case 120: wifi_print_status(); break;
 	}

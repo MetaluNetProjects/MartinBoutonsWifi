@@ -36,37 +36,23 @@ endif()
 
 add_executable(${CMAKE_PROJECT_NAME}
         main.cpp
-        system.cpp
         version.cpp
-        fraise.c
-        ${CMAKE_CURRENT_LIST_DIR}/../modules/ota_server/ota_server.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/../modules/dhcpserver/dhcpserver.c
-        ${CMAKE_CURRENT_LIST_DIR}/../modules/dnsserver/dnsserver.c
         )
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
         WIFI_SSID=\"${WIFI_SSID}\"
         WIFI_PASSWORD=\"${WIFI_PASSWORD}\"
+        WIFI_IPADDR_D=${WIFI_IPADDR_D}
         PICO_CRT0_IMAGE_TYPE_TBYB=1
         )
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/.. # for our common lwipopts
-        ${CMAKE_CURRENT_LIST_DIR}/../modules/dhcpserver
-        ${CMAKE_CURRENT_LIST_DIR}/../modules/dnsserver
-        ${CMAKE_CURRENT_LIST_DIR}/../modules/ota_server
         )
 
 add_subdirectory(../modules modules)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
-        #pico_cyw43_arch_lwip_threadsafe_background
-        pico_cyw43_arch_lwip_poll
-        pico_stdlib
-        pico_sha256
-        pico_multicore
-        boot_uf2_headers
-        hardware_pwm
-        ws2812par
+        wifraise
         )
 
 # force recompile version.cpp each time for updating __TIME__
